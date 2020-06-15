@@ -5,8 +5,11 @@
 package it.polito.tdp.food;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
+import it.polito.tdp.food.model.Food;
+import it.polito.tdp.food.model.FoodCalories;
 import it.polito.tdp.food.model.Model;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -41,7 +44,7 @@ public class FoodController {
     private Button btnSimula; // Value injected by FXMLLoader
 
     @FXML // fx:id="boxFood"
-    private ComboBox<?> boxFood; // Value injected by FXMLLoader
+    private ComboBox<Food> boxFood; // Value injected by FXMLLoader
 
     @FXML // fx:id="txtResult"
     private TextArea txtResult; // Value injected by FXMLLoader
@@ -49,13 +52,47 @@ public class FoodController {
     @FXML
     void doCreaGrafo(ActionEvent event) {
     	txtResult.clear();
-    	txtResult.appendText("Creazione grafo...");
+    	txtResult.appendText("Creazione grafo...\n");
+    	String porzioniString=this.txtPorzioni.getText();
+    	Integer porzioni=null;
+    	try {
+    		porzioni=Integer.parseInt(porzioniString);
+    	}catch(NumberFormatException e) {
+    		e.printStackTrace();
+    		this.txtResult.appendText("ATTENZIONE! Il valore inserito per il campo porzioni non e' un numero.");
+    		throw new NumberFormatException();
+    	}
+    	model.creaGrafo(porzioni);
+    	List<Food> cibi=model.getCibi();
+    	if(cibi!=null) {
+    		this.boxFood.getItems().addAll(cibi);
+    		this.txtResult.appendText("GRAFO CREATO CON SUCCESSO!\n "+model.getNumArchi()+" ARCHI e "+model.getNumVertici()+" VERTICI.\n");
+    	}
+    	
     }
     
     @FXML
     void doCalorie(ActionEvent event) {
     	txtResult.clear();
-    	txtResult.appendText("Analisi calorie...");
+    	txtResult.appendText("Analisi calorie...\n");
+    	Food source=this.boxFood.getValue();
+    	if(source==null) {
+    		this.txtResult.appendText("ATTENZIONE! Nessun cibo selezionato nel menu' a tendina.\n");
+    		return;
+    	}
+    	List<FoodCalories> congiunti=model.analisiCalorie(source);
+    	if(congiunti==null) {
+    		this.txtResult.appendText("Errore nell'analisi dei cibi congiunti a quello selezionato.\n");
+    		return;
+    	}
+    	if(congiunti.size()==0) {
+    		this.txtResult.appendText("Nessun cibo con calorie congiunte.\n");
+    		return;
+    	}
+    	this.txtResult.appendText("Ecco i cibi congiunti con le loro calorie congiunte:\n");
+    	for(int i=0;i<5 && i<congiunti.size();i++) {
+    		this.txtResult.appendText("-"+congiunti.get(i).toString()+"\n");
+    	}
     }
 
     @FXML
