@@ -4,10 +4,17 @@ public class Food {
 	private Integer food_code;
 	private String display_name;
 	
+	public enum StatoPreparazione {
+		DA_PREPARARE,
+		IN_CORSO,
+		PREPARATO
+	}
+	private StatoPreparazione preparazione;
 	public Food(Integer food_code, String display_name) {
 		super();
 		this.food_code = food_code;
 		this.display_name = display_name;
+		this.setPreparazione(StatoPreparazione.DA_PREPARARE);
 	}
 	
 	public Integer getFood_code() {
@@ -22,7 +29,14 @@ public class Food {
 	public void setDisplay_name(String display_name) {
 		this.display_name = display_name;
 	}
+	public StatoPreparazione getPreparazione() {
+		return preparazione;
+	}
 
+	public void setPreparazione(StatoPreparazione preparazione) {
+		this.preparazione = preparazione;
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -52,7 +66,4 @@ public class Food {
 	public String toString() {
 		return display_name;
 	}
-
-	
-	
 }

@@ -98,7 +98,30 @@ public class FoodController {
     @FXML
     void doSimula(ActionEvent event) {
     	txtResult.clear();
-    	txtResult.appendText("Simulazione...");
+    	txtResult.appendText("Simulazione...\n");
+    	String kString=this.txtK.getText();
+    	Integer k=null;
+    	try {
+    		k=Integer.parseInt(kString);
+    	}catch(NumberFormatException e) {
+    		e.printStackTrace();
+    		this.txtResult.appendText("ATTENZIONE! Il valore inserito per il campo K non e' un numero intero.");
+    		throw new NumberFormatException();
+    	}
+    	if(k<1 || k>10) {
+    		this.txtResult.appendText("ATTENZIONE! Il numero K deve essere un intero compreso tra 1 e 10.");
+    		return;
+    	}
+    	Food source=this.boxFood.getValue();
+    	if(source==null) {
+    		this.txtResult.appendText("ATTENZIONE! Nessun cibo selezionato nel menu' a tendina.\n");
+    		return;
+    	}
+    	String messaggio=model.simula(k,source);
+    	if(messaggio!=null) {
+    		this.txtResult.appendText(messaggio);
+    		return;
+    	}
     }
 
     @FXML // This method is called by the FXMLLoader when initialization is complete

@@ -44,7 +44,11 @@ public class Model {
 	public Integer getNumArchi() {
 		return this.graph.edgeSet().size();
 	}
-	
+	/**
+	 * Ritorna una lista ordinata in ordine crescente di peso dei vicini di un cibo
+	 * @param source
+	 * @return lista ordinata crescente di peso dei vicini di source
+	 */
 	public List<FoodCalories> analisiCalorie(Food source){
 		List<FoodCalories> list=new ArrayList<>();
 		List<Food> vicini= new ArrayList<>(Graphs.neighborListOf(this.graph, source));
@@ -54,5 +58,13 @@ public class Model {
 		}
 		Collections.sort(list);
 		return list;
+	}
+
+	public String simula(Integer k,Food source) {
+		Simulator sim=new Simulator(this.graph, this);
+		sim.init(k,source);
+		sim.run();
+		String messaggio=String.format("Preparati %d cibi in %f minuti", sim.getCibiPreparati(),sim.getTempoPreparazione());
+		return messaggio;
 	}
 }

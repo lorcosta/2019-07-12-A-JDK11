@@ -6,7 +6,7 @@ public class FoodCalories implements Comparable<FoodCalories>{
 	
 	@Override
 	public int compareTo(FoodCalories other) {
-		return this.calories.compareTo(other.calories);
+		return -this.calories.compareTo(other.calories);
 	}
 	/**
 	 * @param food
